@@ -40,6 +40,16 @@ const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
+    newGame: (state) => {
+      state.availableCities = [...initialCities];
+      state.currentPlayer = PlayerTurn.FirstPlayer;
+      state.cities.player1 = [];
+      state.cities.player2 = [];
+      state.startValue = '';
+      state.filteredCities = [];
+      state.delay = 5000;
+      state.placeholder = 'Напишите любой город, например: Где вы живете?';
+    },
     startGame: (state, action: PayloadAction<string>) => {
       const submittedCity = action.payload.trim().toLowerCase();
       const isValidFirstCity = state.availableCities.includes(submittedCity);
@@ -52,6 +62,10 @@ const gameSlice = createSlice({
           state.cities.player1.push(submittedCity);
           state.currentPlayer = PlayerTurn.SecondPlayer;
           state.placeholder = 'Ожидаем ответа соперника...';
+        } else {
+          alert('Такого города нет. Теперь ход соперника!');
+          state.placeholder = 'Ожидаем ответа соперника...';
+          state.currentPlayer = PlayerTurn.SecondPlayer;
         }
       }
     },
@@ -109,6 +123,7 @@ const gameSlice = createSlice({
 
         case !state.availableCities.includes(submittedCity):
           alert('Такого города нет. Теперь ход соперника!');
+          state.placeholder = 'Ожидаем ответа соперника...';
           state.currentPlayer = PlayerTurn.SecondPlayer;
           break;
 
@@ -125,7 +140,7 @@ const gameSlice = createSlice({
   },
 });
 
-export const { startGame, setFilteredCities, setDelay, secondPlayerMove, submitCity } =
+export const { newGame, startGame, setFilteredCities, setDelay, secondPlayerMove, submitCity } =
   gameSlice.actions;
 export const gameState = (state: RootState) => state.games;
 export default gameSlice.reducer;

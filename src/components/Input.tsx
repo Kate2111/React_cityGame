@@ -1,7 +1,7 @@
 import { gameState } from '@/store/slice/gameSlice';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-
+import Icon from './Icon';
 interface CityInputProps {
   onSubmit: (city: string) => void;
 }
@@ -14,33 +14,36 @@ const Input: React.FC<CityInputProps> = ({ onSubmit }) => {
     setCity(event.target.value);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     if (city.trim() !== '') {
       onSubmit(city.trim());
       setCity('');
     }
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="flex">
-        <input
-          value={city}
-          onChange={handleChange}
-          type="text"
-          name="price"
-          id="price"
-          className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          placeholder={placeholder}
-        />
-        <button
-          type="submit"
-          className="bg-violet-600 w-32 h-10 rounded p-4 text-white flex items-center justify-center">
-          Ok
-        </button>
-      </div>
-    </form>
+    <div className="flex mt-4  relative">
+      <input
+        value={city}
+        onChange={handleChange}
+        onKeyDown={handleKeyPress}
+        type="text"
+        className="block w-full outline-none bg-gray-100 h-12 border-transparent rounded-md py-2 pl-3 pr-2 text-gray-900 placeholder:text-gray-700 focus:ring-2 sm:text-sm sm:leading-6"
+        placeholder={placeholder}
+      />
+      <button
+        onClick={handleSubmit}
+        className="bg-violet-600 w-8 h-8 absolute top-2 right-2 rounded p-0 text-white flex items-center justify-center">
+        <Icon />
+      </button>
+    </div>
   );
 };
 

@@ -1,32 +1,30 @@
+import { AppRoutes } from '@/router/routes';
 import { gameState } from '@/store/slice/gameSlice';
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-interface TimerProps {
-  onTimeout: () => void;
-}
+import { decrementTimer, resetTimer, timerState } from '@/store/slice/timerSlice';
+import { FC, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-const Timer: React.FC<TimerProps> = ({ onTimeout }) => {
-  const [seconds, setSeconds] = useState(120);
+const Timer: FC = () => {
   const { currentPlayer } = useSelector(gameState);
+  const { timer } = useSelector(timerState);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  if (timer === 0) {
+    navigate(AppRoutes.result);
+  }
 
   useEffect(() => {
-    console.log('ghjdthrf');
     const timerId = setInterval(() => {
-      setSeconds((prevSeconds) => {
-        if (prevSeconds > 0) {
-          return prevSeconds - 1;
-        } else {
-          clearInterval(timerId);
-          onTimeout();
-          return 0;
-        }
-      });
+      dispatch(decrementTimer());
     }, 1000);
 
-    setSeconds(120);
-
-    return () => clearInterval(timerId);
-  }, [currentPlayer]);
+    return () => {
+      clearInterval(timerId);
+      dispatch(resetTimer());
+    };
+  }, [currentPlayer, dispatch]);
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -36,7 +34,11 @@ const Timer: React.FC<TimerProps> = ({ onTimeout }) => {
     return `${formattedMinutes}:${formattedSeconds}`;
   };
 
-  return <div>{formatTime(seconds)}</div>;
+  return (
+    <>
+      <div className="text-xl font-medium">{formatTime(timer)}</div>
+    </>
+  );
 };
 
 export default Timer;

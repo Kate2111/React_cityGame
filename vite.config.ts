@@ -10,6 +10,7 @@ export default defineConfig({
       '@': '/src',
       '@/constant': '/src/constant',
       '@/router': '/src/router',
+      '@/assets': '/src/assets',
     },
   },
 });

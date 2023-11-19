@@ -1,6 +1,9 @@
-import { gameState } from '@/store/slice/gameSlice';
+import Button from '@/components/Button';
+import { AppRoutes } from '@/router/routes';
+import { gameState, newGame } from '@/store/slice/gameSlice';
 import { FC } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const ResultPage: FC = () => {
   const { currentPlayer, cities } = useSelector(gameState);
@@ -26,29 +29,51 @@ const ResultPage: FC = () => {
   const lastCityPlayer1 = citiesPlayer1 > 0 && cities.player1[citiesPlayer1 - 1];
   const lastCityPlayer2 = citiesPlayer2 > 0 && cities.player2[citiesPlayer2 - 1];
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onButtonRouter = () => {
+    navigate(AppRoutes.game);
+    dispatch(newGame());
+  };
+
   return (
     <>
-      <div className="max-w-xl h-96 flex flex-col bg-white rounded-2xl text-grey-700">
-        {currentPlayer === 'Сейчас очередь соперника' ? (
-          <>
-            <p>Поздравляем тебя с победой!</p>
-            <p>Твой противник не вспомнил нужный город!</p>
-          </>
-        ) : (
-          <>
-            <p>К сожалению, свое время вышло!</p>
-            <p>Твой противник победил!</p>
-          </>
-        )}
+      <div className="max-w-xl h-96 min-w-[576px] px-7 flex flex-col items-center justify-center gap-5 bg-white rounded-2xl text-grey-700">
+        <div className="text-xl flex flex-col items-center justify-center">
+          {currentPlayer === 'Сейчас очередь соперника' ? (
+            <>
+              <p>Поздравляем тебя с победой!</p>
+              <p>Твой противник не вспомнил нужный город!</p>
+            </>
+          ) : (
+            <>
+              <p>К сожалению, твое время вышло!</p>
+              <p>Твой противник победил!</p>
+            </>
+          )}
+        </div>
 
-        <p>Всего было перечислено городов {totalCities}</p>
-
-        <p>{message}</p>
-
-        <p>
-          Последний город названный победителем
-          {currentPlayer === 'Сейчас очередь соперника' ? lastCityPlayer1 : lastCityPlayer2}
+        <p
+          className={`text-3xl font-medium ${
+            currentPlayer === 'Сейчас очередь соперника' ? 'text-green-600' : 'text-red-600'
+          }`}>
+          00:00
         </p>
+
+        <p className="text-xl">Всего было перечислено городов {totalCities}</p>
+
+        <p className="text-xl">{message}</p>
+
+        <p className="text-xl">
+          Последний город названный победителем{' '}
+          <span className="text-2xl font-medium">
+            {' '}
+            {currentPlayer === 'Сейчас очередь соперника' ? lastCityPlayer1 : lastCityPlayer2}
+          </span>
+        </p>
+
+        <Button onClick={onButtonRouter}>Начать новую игру</Button>
       </div>
     </>
   );

@@ -3,11 +3,8 @@
 @tailwind utilities;
 
 body {
-  background-color: rgba(128, 128, 128, 0.477);
   box-sizing: border-box;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  @apply bg-gray-300;
+  @apply flex justify-center items-center;
+  @apply h-screen m-0;
 }
