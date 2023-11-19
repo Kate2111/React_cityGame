@@ -1,38 +1,32 @@
-import { AppRoutes } from '@/router/routes';
 import { gameState } from '@/store/slice/gameSlice';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
-/* interface TimerProps {
-  time: number;
+interface TimerProps {
   onTimeout: () => void;
-} */
+}
 
-const Timer: React.FC = () => {
-  const { timer } = useSelector(gameState);
-  const [seconds, setSeconds] = useState(timer);
-  const navigate = useNavigate();
+const Timer: React.FC<TimerProps> = ({ onTimeout }) => {
+  const [seconds, setSeconds] = useState(120);
+  const { currentPlayer } = useSelector(gameState);
 
   useEffect(() => {
-    console.log(timer);
+    console.log('ghjdthrf');
     const timerId = setInterval(() => {
       setSeconds((prevSeconds) => {
         if (prevSeconds > 0) {
           return prevSeconds - 1;
         } else {
           clearInterval(timerId);
+          onTimeout();
           return 0;
         }
       });
     }, 1000);
 
-    return () => clearInterval(timerId);
-  }, [timer]);
+    setSeconds(120);
 
-  if (seconds === 0) {
-    navigate(AppRoutes.result);
-  }
+    return () => clearInterval(timerId);
+  }, [currentPlayer]);
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);

@@ -10,26 +10,29 @@ enum PlayerTurn {
 }
 
 interface GameState {
+  availableCities: string[];
+  currentPlayer: PlayerTurn;
   cities: {
     player1: string[];
     player2: string[];
   };
-  availableCities: string[];
   startValue: string;
-  currentPlayer: PlayerTurn;
-  timer: number;
+
+  filteredCities: string[];
+  delay: number;
   placeholder: string;
 }
 
 const initialState: GameState = {
+  availableCities: [...initialCities],
+  currentPlayer: PlayerTurn.FirstPlayer,
   cities: {
     player1: [],
     player2: [],
   },
-  availableCities: [...initialCities],
   startValue: '',
-  currentPlayer: PlayerTurn.FirstPlayer,
-  timer: 120,
+  filteredCities: [],
+  delay: 5000,
   placeholder: 'Напишите любой город, например: Где вы живете?',
 };
 
@@ -47,32 +50,47 @@ const gameSlice = createSlice({
         if (indexToRemove !== -1) {
           state.availableCities.splice(indexToRemove, 1);
           state.cities.player1.push(submittedCity);
-          state.timer = 120;
           state.currentPlayer = PlayerTurn.SecondPlayer;
           state.placeholder = 'Ожидаем ответа соперника...';
         }
       }
     },
-    endGame: () => {
-      alert('Время вышло');
-    },
-    secondPlayerMove: (state) => {
+    setFilteredCities: (state) => {
       if (!state.cities || !state.cities.player1 || state.cities.player1.length === 0) {
         return state;
       }
-
       const lastLetter = getLastLetter(state.cities.player1);
-
-      const filteredCities = state.availableCities.filter((city) => city.startsWith(lastLetter));
-      const randomCity = filteredCities[Math.floor(Math.random() * filteredCities.length)];
+      state.filteredCities = state.availableCities.filter((city) => city.startsWith(lastLetter));
+    },
+    setDelay: (state) => {
+      const filter = state.filteredCities.length;
+      switch (true) {
+        case filter < 20 && filter >= 13:
+          state.delay = 20000;
+          break;
+        case filter < 13 && filter >= 7:
+          state.delay = 60000;
+          break;
+        case filter >= 0 && filter < 7:
+          state.delay = 120100;
+          break;
+        default:
+          state.delay = 5000;
+          break;
+      }
+    },
+    secondPlayerMove: (state) => {
+      const randomCity =
+        state.filteredCities[Math.floor(Math.random() * state.filteredCities.length)];
+      const placeholderMessage = `Знаете город на букву "${randomCity.slice(-1).toUpperCase()}"?`;
 
       const indexToRemove = state.availableCities.indexOf(randomCity);
       if (indexToRemove !== -1) {
         state.availableCities.splice(indexToRemove, 1);
         state.cities.player2.push(randomCity);
-        state.timer = 120;
         state.currentPlayer = PlayerTurn.FirstPlayer;
-        state.placeholder = `Знаете город на букву "${randomCity.charAt(0).toUpperCase()}"?`;
+        state.placeholder = placeholderMessage;
+        state.filteredCities = [];
       }
     },
     submitCity: (state, action: PayloadAction<string>) => {
@@ -92,15 +110,13 @@ const gameSlice = createSlice({
         case !state.availableCities.includes(submittedCity):
           alert('Такого города нет. Теперь ход соперника!');
           state.currentPlayer = PlayerTurn.SecondPlayer;
-          state.timer = 120;
-          state.placeholder = 'Ожидаем ответа соперника...';
           break;
 
         default:
           if (indexToRemove !== -1) {
             state.availableCities.splice(indexToRemove, 1);
             state.cities.player1.push(submittedCity);
-            state.timer = 120;
+            state.placeholder = 'Ожидаем ответа соперника...';
             state.currentPlayer = PlayerTurn.SecondPlayer;
           }
           break;
@@ -109,6 +125,7 @@ const gameSlice = createSlice({
   },
 });
 
-export const { startGame, endGame, secondPlayerMove, submitCity } = gameSlice.actions;
+export const { startGame, setFilteredCities, setDelay, secondPlayerMove, submitCity } =
+  gameSlice.actions;
 export const gameState = (state: RootState) => state.games;
 export default gameSlice.reducer;
