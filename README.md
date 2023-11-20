@@ -1,6 +1,6 @@
 # React-CiryGame
 
-https://kate2111.github.io/React-CityGame/
+https://kate2111.github.io/React_cityGame/
 
 <h2>Игра в города с компьютером по таймеру</h2>
 

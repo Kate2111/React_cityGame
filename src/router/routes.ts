@@ -3,11 +3,10 @@ import ResultPage from '@/pages/ResultPage';
 import StartPage from '@/pages/StartPage';
 
 export const AppRoutes = {
-  start: '/React-CityGame',
-  game: '/React-CityGame/game',
-  result: '/React-CityGame/result',
+  start: '/React_cityGame',
+  game: '/React_cityGame/game',
+  result: '/React_cityGame/result',
 };
-
 interface RouteObject {
   path: string;
   element: React.ComponentType;
