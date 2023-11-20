@@ -12,7 +12,7 @@ const StartPage: FC = () => {
 
   return (
     <>
-      <div className="max-w-xl flex flex-col bg-white rounded-2xl text-grey-700">
+      <div className="max-w-xl mx-auto flex flex-col bg-white rounded-2xl text-grey-700">
         <div>
           <header className="h-16 p-4 border-gray-100 border-solid border-b-4 flex justify-center items-center">
             <p>Игра в города на время</p>

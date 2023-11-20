@@ -6,9 +6,9 @@ interface CityInputProps {
   onSubmit: (city: string) => void;
 }
 
-const Input: React.FC<CityInputProps> = ({ onSubmit }) => {
+const CityInput: React.FC<CityInputProps> = ({ onSubmit }) => {
   const [city, setCity] = useState('');
-  const { placeholder } = useSelector(gameState);
+  const { currentPlayer, placeholder } = useSelector(gameState);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCity(event.target.value);
@@ -35,16 +35,20 @@ const Input: React.FC<CityInputProps> = ({ onSubmit }) => {
         onChange={handleChange}
         onKeyDown={handleKeyPress}
         type="text"
-        className="block w-full outline-none bg-gray-100 h-12 border-transparent rounded-md py-2 pl-3 pr-2 text-gray-900 placeholder:text-gray-700 focus:ring-2 sm:text-sm sm:leading-6"
+        className={`block w-full outline-none bg-gray-100 h-12 border-transparent rounded-md py-2 pl-3 pr-2 text-sm text-gray-900 focus:ring-2 sm:text-base ${
+          currentPlayer === 'Игрок1' ? 'placeholder:text-gray-700' : 'placeholder:text-gray-400'
+        }`}
         placeholder={placeholder}
       />
       <button
         onClick={handleSubmit}
-        className="bg-violet-600 w-8 h-8 absolute top-2 right-2 rounded p-0 text-white flex items-center justify-center">
+        className={` w-8 h-8 absolute top-2 right-2 rounded p-0 text-white flex items-center justify-center ${
+          currentPlayer === 'Игрок1' ? 'bg-violet-600' : 'bg-gray-400'
+        }`}>
         <Icon />
       </button>
     </div>
   );
 };
 
-export default Input;
+export default CityInput;

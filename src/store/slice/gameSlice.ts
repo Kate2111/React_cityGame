@@ -1,12 +1,11 @@
 import initialCities from '@/constant/constant';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { getLastLetter } from './gameUtils';
-//import { chooseRandomCity } from './gameUtils';
+import { getLastLetter, getSubmittedCity } from './gameUtils';
 
 enum PlayerTurn {
-  FirstPlayer = 'Сейчас ваша очередь',
-  SecondPlayer = 'Сейчас очередь соперника',
+  FirstPlayer = 'Игрок1',
+  SecondPlayer = 'Игрок2',
 }
 
 interface GameState {
@@ -51,22 +50,26 @@ const gameSlice = createSlice({
       state.placeholder = 'Напишите любой город, например: Где вы живете?';
     },
     startGame: (state, action: PayloadAction<string>) => {
-      const submittedCity = action.payload.trim().toLowerCase();
+      const submittedCity = getSubmittedCity(action.payload);
       const isValidFirstCity = state.availableCities.includes(submittedCity);
 
-      if (isValidFirstCity) {
-        state.startValue = action.payload;
-        const indexToRemove = state.availableCities.indexOf(submittedCity);
-        if (indexToRemove !== -1) {
-          state.availableCities.splice(indexToRemove, 1);
-          state.cities.player1.push(submittedCity);
-          state.currentPlayer = PlayerTurn.SecondPlayer;
-          state.placeholder = 'Ожидаем ответа соперника...';
-        } else {
-          alert('Такого города нет. Теперь ход соперника!');
-          state.placeholder = 'Ожидаем ответа соперника...';
-          state.currentPlayer = PlayerTurn.SecondPlayer;
-        }
+      if (!isValidFirstCity) {
+        alert('Такого города нет. Попробуйте еще раз!');
+        return;
+      }
+
+      state.startValue = action.payload;
+      const indexToRemove = state.availableCities.indexOf(submittedCity);
+
+      if (indexToRemove !== -1) {
+        state.availableCities.splice(indexToRemove, 1);
+        state.cities.player1.push(submittedCity);
+        state.currentPlayer = PlayerTurn.SecondPlayer;
+        state.placeholder = 'Ожидаем ответа соперника...';
+      } else {
+        alert('Такого города нет. Теперь ход соперника!');
+        state.placeholder = 'Ожидаем ответа соперника...';
+        state.currentPlayer = PlayerTurn.SecondPlayer;
       }
     },
     setFilteredCities: (state) => {
@@ -80,10 +83,10 @@ const gameSlice = createSlice({
       const filter = state.filteredCities.length;
       switch (true) {
         case filter < 20 && filter >= 13:
-          state.delay = 20000;
+          state.delay = 15000;
           break;
         case filter < 13 && filter >= 7:
-          state.delay = 60000;
+          state.delay = 40000;
           break;
         case filter >= 0 && filter < 7:
           state.delay = 120100;
@@ -112,7 +115,7 @@ const gameSlice = createSlice({
         return state;
       }
 
-      const submittedCity = action.payload.trim().toLowerCase();
+      const submittedCity = getSubmittedCity(action.payload);
       const lastLetter = getLastLetter(state.cities.player2);
       const indexToRemove = state.availableCities.indexOf(submittedCity);
 

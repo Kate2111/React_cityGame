@@ -5,7 +5,7 @@ interface ListItemProps {
   isRight?: boolean;
 }
 
-const ListItem: FC<ListItemProps> = ({ city, isRight = false }) => {
+const CityListItem: FC<ListItemProps> = ({ city, isRight = false }) => {
   const classNames = ` py-1.5 px-5 rounded-t-2xl w-max ${
     isRight
       ? 'ml-auto rounded-bl-2xl bg-violet-500 text-right text-white'
@@ -15,4 +15,4 @@ const ListItem: FC<ListItemProps> = ({ city, isRight = false }) => {
   return <li className={classNames}>{city}</li>;
 };
 
-export default ListItem;
+export default CityListItem;

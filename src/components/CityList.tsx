@@ -1,12 +1,12 @@
 import React from 'react';
-import ListItem from './ListItem';
+import ListItem from './CityListItem';
 
 interface CityListProps {
   citiesLeft: string[];
   citiesRight: string[];
 }
 
-const List: React.FC<CityListProps> = ({ citiesLeft, citiesRight }) => {
+const CityList: React.FC<CityListProps> = ({ citiesLeft, citiesRight }) => {
   const messages = citiesLeft
     .map((city, index) => ({ player: 'player1', text: city, index }))
     .concat(citiesRight.map((city, index) => ({ player: 'player2', text: city, index })))
@@ -28,4 +28,4 @@ const List: React.FC<CityListProps> = ({ citiesLeft, citiesRight }) => {
   );
 };
 
-export default List;
+export default CityList;

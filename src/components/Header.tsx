@@ -13,7 +13,9 @@ const Header: FC = () => {
   return (
     <header className="h-16 flex flex-col">
       <div className="flex justify-between items-center p-4 ">
-        <p className="text-base">{currentPlayer}</p>
+        <p className="text-sm sm:text-base">
+          {currentPlayer === 'Игрок1' ? 'Сейчас ваша очередь' : 'Сейчас очередь соперника'}
+        </p>
         <Timer />
       </div>
       <div className="relative w-full h-1 bg-gray-100 rounded">

@@ -39,9 +39,9 @@ const ResultPage: FC = () => {
 
   return (
     <>
-      <div className="max-w-xl h-96 min-w-[576px] px-7 flex flex-col items-center justify-center gap-5 bg-white rounded-2xl text-grey-700">
-        <div className="text-xl flex flex-col items-center justify-center">
-          {currentPlayer === 'Сейчас очередь соперника' ? (
+      <div className="max-w-xl mx-auto h-96 px-7 flex flex-col items-center justify-center gap-5 bg-white rounded-2xl text-grey-700">
+        <div className="text-base flex flex-col items-center justify-center sm:text-xl">
+          {currentPlayer === 'Игрок2' ? (
             <>
               <p>Поздравляем тебя с победой!</p>
               <p>Твой противник не вспомнил нужный город!</p>
@@ -56,20 +56,19 @@ const ResultPage: FC = () => {
 
         <p
           className={`text-3xl font-medium ${
-            currentPlayer === 'Сейчас очередь соперника' ? 'text-green-600' : 'text-red-600'
+            currentPlayer === 'Игрок2' ? 'text-green-600' : 'text-red-600'
           }`}>
           00:00
         </p>
 
-        <p className="text-xl">Всего было перечислено городов {totalCities}</p>
+        <p className="text-base sm:text-xl">Всего было перечислено городов {totalCities}</p>
 
-        <p className="text-xl">{message}</p>
+        <p className="text-base sm:text-xl">{message}</p>
 
-        <p className="text-xl">
-          Последний город названный победителем{' '}
-          <span className="text-2xl font-medium">
-            {' '}
-            {currentPlayer === 'Сейчас очередь соперника' ? lastCityPlayer1 : lastCityPlayer2}
+        <p className="text-base sm:text-xl">
+          Последний город названный победителем
+          <span className="text-lg font-medium sm:text-2xl ">
+            {currentPlayer === 'Игрок2' ? lastCityPlayer1 : lastCityPlayer2}
           </span>
         </p>
 

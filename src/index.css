@@ -5,6 +5,12 @@
 body {
   box-sizing: border-box;
   @apply bg-gray-300;
-  @apply flex justify-center items-center;
   @apply h-screen m-0;
+  padding-top: 8%;
+}
+
+@media (max-width: 640px) {
+  body {
+    @apply px-3.5;
+  }
 }
