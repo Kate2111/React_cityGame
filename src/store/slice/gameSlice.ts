@@ -67,9 +67,7 @@ const gameSlice = createSlice({
         state.currentPlayer = PlayerTurn.SecondPlayer;
         state.placeholder = 'Ожидаем ответа соперника...';
       } else {
-        alert('Такого города нет. Теперь ход соперника!');
-        state.placeholder = 'Ожидаем ответа соперника...';
-        state.currentPlayer = PlayerTurn.SecondPlayer;
+        alert('Такого города нет. Попробуйте еще раз!');
       }
     },
     setFilteredCities: (state) => {
@@ -99,6 +97,7 @@ const gameSlice = createSlice({
     secondPlayerMove: (state) => {
       const randomCity =
         state.filteredCities[Math.floor(Math.random() * state.filteredCities.length)];
+      console.log(state.filteredCities);
       const placeholderMessage = `Знаете город на букву "${randomCity.slice(-1).toUpperCase()}"?`;
 
       const indexToRemove = state.availableCities.indexOf(randomCity);

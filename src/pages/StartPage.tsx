@@ -19,7 +19,7 @@ const StartPage: FC = () => {
           </header>
           <main>
             <div className="flex flex-col gap-6 p-6 justify-start text-sm">
-              <p className="">Цель: Назвать как можно больше реальных городов </p>
+              <p className="">Цель: Назвать как можно больше реальных городов России</p>
               <ul className="list-disc pl-6">
                 <li>Запрещается повторение городов.</li>
                 <li>
